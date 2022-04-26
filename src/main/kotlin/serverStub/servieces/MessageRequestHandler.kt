@@ -32,17 +32,13 @@ object MessageRequestHandler : MessageRequestImpl<BaseResponse> {
         val chat = chatService.getChatById(chatMessages.peerId) ?: return Failure(CHAT_NOT_FOUND.code)
         if (chatMessages.offset > chat.messages.values.last().id) return Failure(MESSAGE_NOT_FOUND.code)
 
-        val result = chat.messages.values.asSequence()
+        chat.messages.values.asSequence()
             .filter { it.id >= chatMessages.offset }
             .take(chatMessages.count)
+            .onEach { it.readBy.add(user.id) }
             .map { it.id to chat.messages[it.id] as Message }
             .toMap()
-
-        result.values.asSequence()
-            .filter { !it.readBy.contains(user.id) }
-            .forEach { it.readBy.add(user.id) }
-
-        return MapResponse(result)
+            .let {return MapResponse(it) }
     }
 
     override fun deleteMessage(deleteMessage: DeleteMessage): BaseResponse {

@@ -39,13 +39,13 @@ object ChatRequestHandler : ChatRequestImpl<BaseResponse> {
     fun getChatById(peerId: Int): Chat? = chats[chatKey(user.id, peerId)]
 
     fun createChat(peerId: Int): Chat {
-        val key = chatKey(user.id, peerId)
-        val chat: () -> Chat = {
+        val chat: (Pair<Int, Int>) -> Chat = {
             val newChat = Chat()
-            chats[key] = newChat
+            chats[it] = newChat
             newChat
         }
-        return chats[key] ?: chat()
+        val key = chatKey(user.id, peerId)
+        return chats[key] ?: chat(key)
     }
 
     fun updateChat(peerId: Int, chat: Chat) {

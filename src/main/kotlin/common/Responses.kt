@@ -12,7 +12,7 @@ data class Message(
     val fromId: Int,
     val text: String,
     val date: Long,
-    val readBy: MutableList<Int> = mutableListOf()
+    val readBy: MutableSet<Int> = mutableSetOf()
 ) : BaseResponse()
 
 sealed class ResponsesWrapper : BaseResponse() {
