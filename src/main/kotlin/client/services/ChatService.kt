@@ -1,9 +1,6 @@
 package client.services
 
-import client.exceprions.AccessDenied
-import client.exceprions.ChatNotFound
-import client.exceprions.MessageNotFound
-import client.exceprions.UserNotFound
+import client.exceprions.*
 import client.methods.ChatIml
 import client.methods.MessageImpl
 import common.*
