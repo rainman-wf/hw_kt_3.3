@@ -39,7 +39,6 @@ object MessageRequestHandler : MessageRequestImpl<BaseResponse> {
             .map { it.id to chat.messages[it.id] as Message }
             .toMap()
             .let {return MapResponse(it) }
-
     }
 
     override fun deleteMessage(deleteMessage: DeleteMessage): BaseResponse {
