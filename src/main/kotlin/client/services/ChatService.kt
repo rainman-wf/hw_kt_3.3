@@ -41,6 +41,7 @@ object ChatService : ChatIml<BaseResponse>, MessageImpl<BaseResponse> {
         val result = api.execute(chatMessages)
         if (result is Failure) when (result.code) {
             CHAT_NOT_FOUND.code -> throw ChatNotFound()
+            MESSAGE_NOT_FOUND.code -> throw MessageNotFound()
         }
         return result as MapResponse<*, *>
     }

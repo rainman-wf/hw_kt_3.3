@@ -1,12 +1,12 @@
-package server.servieces
+package serverStub.servieces
 
 import common.*
-import server.methods.MessageRequestImpl
+import serverStub.methods.MessageRequestImpl
 import java.util.*
 import common.ResponsesWrapper.*
-import server.servieces.Server.user
+import serverStub.servieces.Server.user
 import common.ErrorCodes.*
-import server.servieces.UserService.users
+import serverStub.servieces.UserService.users
 
 object MessageRequestHandler : MessageRequestImpl<BaseResponse> {
 
@@ -30,6 +30,7 @@ object MessageRequestHandler : MessageRequestImpl<BaseResponse> {
 
     override fun getChatMessages(chatMessages: GetChatMessages): BaseResponse {
         val chat = chatService.getChatById(chatMessages.peerId) ?: return Failure(CHAT_NOT_FOUND.code)
+        if (chatMessages.offset > chat.messages.values.last().id) return Failure(MESSAGE_NOT_FOUND.code)
 
         val keys = chat.messages.keys.filter { it >= chatMessages.offset }.take(chatMessages.count)
         val result = chat.messages.filterKeys { keys.contains(it) }

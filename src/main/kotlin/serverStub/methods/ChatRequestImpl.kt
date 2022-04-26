@@ -1,4 +1,4 @@
-package server.methods
+package serverStub.methods
 
 import common.DeleteChat
 

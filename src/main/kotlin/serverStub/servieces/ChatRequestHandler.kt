@@ -1,10 +1,10 @@
-package server.servieces
+package serverStub.servieces
 
 import common.*
-import server.methods.ChatRequestImpl
+import serverStub.methods.ChatRequestImpl
 import common.ResponsesWrapper.*
 import common.ErrorCodes.*
-import server.servieces.Server.user
+import serverStub.servieces.Server.user
 
 import kotlin.math.*
 
@@ -19,18 +19,16 @@ object ChatRequestHandler : ChatRequestImpl<BaseResponse> {
     }
 
     override fun getUnreadChatsCount(): BaseResponse {
-        val unread = chats.getUserChats(user.id)
-            .filter {
-                val messages = it.value.messages.values
-                !messages.last().readBy.contains(user.id)
-            }
+        val unread = chats
+            .getUserChats(user.id)
+            .filter { !it.value.messages.values.last().readBy.contains(user.id) }
         return IntResponse(unread.size)
     }
 
     override fun getChats(): BaseResponse {
         val filtered = chats.getUserChats(user.id)
         if (filtered.isEmpty()) return Failure(CHAT_NOT_FOUND.code)
-        return MapResponse(filtered.filter { it.value.messages.isNotEmpty() })
+        return MapResponse(filtered)
     }
 
     private fun chatKey(sender: Int, peer: Int): Pair<Int, Int> = min(sender, peer) to max(sender, peer)

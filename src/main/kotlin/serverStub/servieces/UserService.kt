@@ -1,4 +1,4 @@
-package server.servieces
+package serverStub.servieces
 
 object UserService {
 

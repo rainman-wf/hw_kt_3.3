@@ -5,7 +5,7 @@ import client.methods.Executable
 import common.*
 import common.ErrorCodes.*
 import common.ResponsesWrapper.*
-import server.servieces.Server
+import serverStub.servieces.Server
 
 
 object ApiService : Executable<BaseRequest, BaseResponse> {

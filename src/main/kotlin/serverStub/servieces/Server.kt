@@ -1,7 +1,7 @@
-package server.servieces
+package serverStub.servieces
 
 import common.*
-import server.methods.CallbackImpl
+import serverStub.methods.CallbackImpl
 import common.ResponsesWrapper.*
 import common.RequestWrapper.*
 import common.ErrorCodes.*

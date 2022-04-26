@@ -91,16 +91,17 @@ class ChatServiceTest {
 
     @Test
     fun createMessage() {
-
         api.userId = 1
-
         val newMessage = NewMessage(2, "Message #1")
-
         val result = service.sendMessage(newMessage)
-
         val expect = (service.getChatMessages(GetChatMessages(2)) as MapResponse<*, *>).map[0]
-
         assertEquals(expect, result)
+    }
+
+    @Test(expected = UserNotFound::class)
+    fun createMessage_user_not_found() {
+        api.userId = 1
+        service.sendMessage(NewMessage(12, "Message #1"))
     }
 
     @Test
@@ -120,6 +121,20 @@ class ChatServiceTest {
         assertEquals(result, expect)
     }
 
+    @Test (expected = MessageNotFound::class)
+    fun getChatMessages_offset_over() {
+
+        api.userId = 8
+
+
+            0 to service.sendMessage(NewMessage(7, "Message 1"))
+            1 to service.sendMessage(NewMessage(7, "Message 2"))
+            2 to service.sendMessage(NewMessage(7, "Message 3"))
+            3 to service.sendMessage(NewMessage(7, "Message 4"))
+
+        service.getChatMessages(GetChatMessages(7, 5))
+    }
+
     @Test(expected = ChatNotFound::class)
     fun getChatMessages_chat_not_found() {
         api.userId = 5
@@ -133,6 +148,17 @@ class ChatServiceTest {
         service.sendMessage(NewMessage(4, "Message 1"))
 
         val result = service.deleteMessage(DeleteMessage(4, 0))
+
+        assertEquals(result, Success)
+    }
+
+    @Test
+    fun deleteMessage_last_msg() {
+
+        api.userId = 6
+        service.sendMessage(NewMessage(8, "Message 1"))
+
+        val result = service.deleteMessage(DeleteMessage(8, 0))
 
         assertEquals(result, Success)
     }
